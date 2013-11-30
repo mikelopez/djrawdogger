@@ -1,6 +1,12 @@
 from datetime import datetime
 from django.db import models
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
+
+# static urls checked first for static filters on query
+URLS = [getattr(settings, "BROWSE_URL", None),
+        getattr(settings, "PIC_URL", None),
+        getattr(settings, "VIDS_URL", None)]
 
 class Website(models.Model):
     """
@@ -11,17 +17,43 @@ class Website(models.Model):
     objects = WebManager()
 
 class CategoryManager(models.Manager):
-    @classmethod
-    def sync_with_tags(self):
-        """Try to sync with models in xxxgalleries app."""
+    """Category Manager"""
+    def get_tags_model_class(self):
         try:
-            from xxxgalleries.models import Tags as _tags
-            for i in _tags.objects.all():
+            _tags = ContentType.objects.get(name='tags')
+        except ContentType.DoesNotExist:
+            return None
+        return _tags.model_class()
+
+    @classmethod
+    def tag_model(self):
+        return self.get_tags_model_class()
+
+    @classmethod
+    def sync_with_tags(self, full=False):
+        """Make sure all Tags() exist in Categories()"""
+        try:
+            Tags = get_tags_model_class().model_class()
+            for i in Tags.objects.all():
                 try:
                     return Category.objects.get(name=i)
                 except Category.DoesNotExist:
                     c = Category(name=i)
                     c.save()
+        except ImportError:
+            return None
+        if full:
+            self.backward_sync()
+
+    def backward_sync(self):
+        """Checks if the tags here exist in Categories"""
+        try:
+            Tags = get_tags_model_class().model_class()
+            for i in Category.objects.all():
+                try:
+                    Tags.objects.get(name=i.name):
+                except Tags.DoesNotExist:
+                    i.delete()
         except ImportError:
             return None
 
@@ -31,6 +63,12 @@ class Category(models.Model):
     """
     name = models.CharField(max_length=50)
     objects = CategoryManager()
+    def get_tag_object(self):
+        """Return the tag object whos name is same as self.name"""
+        try:
+            return Category.objects.tag_model().get(name=self.name)
+        except:
+            return None
 
 class WebsitePage(models.Model):
     """
@@ -40,8 +78,8 @@ class WebsitePage(models.Model):
     page = models.CharField(max_length=50)
     website = models.ForeignKey('Website')
     categories = models.ManyToManyField('Category')
-    get_data = models.CharField(max_length=2,
-                                choices=Website.YN)
+    get_data = models.NullBooleanField(default=False)
+    show_categories = models.NullBooleanField(default=False)
 
 class Analytics(models.Model):
     """
@@ -56,17 +94,111 @@ class Analytics(models.Model):
     ua = models.TextField(blank=True, null=True)
 
 class WebManager(models.Manager):
+    filters = {}
+
+    @property
+    def browse(self):
+        """
+        Browse page.
+        If value is in filters, search for categories.
+        If not, return all content.
+        """
+        value = self.filters.get('value')
+        if value:
+            # search by a category name/id
+            try:
+                cat = Category.objects.get(pk=int(value))
+            except (ValueError):
+                try:
+                    cat = Category.objects.get(name=str(value))
+                except (ValueError, Category.DoesNotExist):
+                    cat = None
+            qfilter = {}
+            if cat:
+                tag_object = cat.get_tag_object()
+                qfilter = {'tags_in': [tag_object]}
+            Gallery = self.gallery_model()
+            return Gallery.objects.filter(**qfilter)
+        return None
+
+    @property
+    def pics(self):
+        """
+        Pics page
+        This requires an ID/Name argument
+        If none is passed, it returns all picture galleries.
+        """
+        value = self.filters.get('value')
+        Gallery = self.gallery_model()
+
+        if value:
+            try:
+                return Gallery.objects.get(pk=int(value), content='pic')
+            except Gallery.DoesNotExist:
+                try:
+                    return Gallery.objects.get(name=str(value), content='pic')
+                except (ValueError, Gallery.DoesNotExist):
+                    return None
+        return Gallery.objects.filter(content='pic')
+
+    @property 
+    def vids(self):
+        value = self.filters.get('value')
+        Gallery = self.gallery_model()
+        if value:
+            try:
+                return Gallery.objects.get(pk=int(value), content='video')
+            except Gallery.DoesNotExist:
+                try:
+                    return Gallery.objects.get(name=str(value), content='video')
+                except (ValueError, Gallery.DoesNotExist):
+                    return None
+        return Gallery.objects.filter(content='video')
+
     @classmethod
     def handle_request(self, request, path=None, value=None):
+        """Handles the main request."""
         domain = self.get_meta_domain(request)
+        website, page = get_website_and_page(domain, path)
+
+        context = {'data': None}
+        fetch = getattr(page, 'get_data', False)
+        if get_content:
+            if path in URLS:
+                if value:
+                    self.filters['value'] = value
+                try:
+                    context['data'] = getattr(self, path, None)
+                except AttributeError:
+                    pass
+                # always force any page to its categories that are set
+            else:
+                Gallery = self.gallery_model()
+                context['data'] = Gallery.objects.all()
+            categories = page.categories.all()
+            if categories:
+                qf = {'tags__in': categories}
+                context.get('data').filter(**qf)
+        return context
+
+    def gallery_model(self):
+        """Return the Gallery() model class from ext app"""
+        try:
+            g = ContentType.objects.get(name='gallery')
+        except ContentType.DoesNotExist:
+            return None
+        return g.model_class()
+
+    def get_website_and_page(self, domain, path):
         try:
             website = Website.objects.get(domain=domain)
         except Website.DoesNotExist:
-            # return an empty context
             return {'context': {}}
-        
-        return {}
-        
+        try:
+            page = WebsitePage.objects.get(website=website, page=path)
+        except WebsitePage.DoesNotExist:
+            return {}
+
 
     def get_meta_domain(self, request):
         """ 

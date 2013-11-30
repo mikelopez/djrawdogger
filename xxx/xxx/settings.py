@@ -171,7 +171,7 @@ LOGGING = {
 
 
 # browse by tag/category/etc
-BROWSE_URL = '/browse/'
-PIC_URL = '/pics/'
-VIDS_URL = '/vids/'
+BROWSE_URL = 'browse'
+PIC_URL = 'pics'
+VIDS_URL = 'vids'
 

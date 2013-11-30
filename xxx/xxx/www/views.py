@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404, render
-
+from models import Website
 
 def index(request, link, filtername):
     """
@@ -7,7 +7,7 @@ def index(request, link, filtername):
     web becomes a dictionary containing a 'context' key
     which will be returned to the template
     """
-    web = WebManager.objects.handle_request(request)
+    web = Website.objects.handle_request(request, link, filtername)
     template = "index.html"
     return render(request, template, web.get('context'))
 

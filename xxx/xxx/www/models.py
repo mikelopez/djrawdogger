@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.db import models
+from django.conf import settings
 
 class Website(models.Model):
     """
@@ -8,10 +9,6 @@ class Website(models.Model):
     YN = ('y','y',),('n','n'),)
     domain = models.CharField(max_length=50)
     objects = WebManager()
-    use_category = models.CharField(max_length=2,
-                                    choices=YN)
-    category = models.ForeignKey('Category', blank=True, null=True)
-    
 
 class CategoryManager(models.Manager):
     @classmethod
@@ -33,13 +30,18 @@ class Category(models.Model):
     Category to bind a website to
     """
     name = models.CharField(max_length=50)
+    objects = CategoryManager()
 
 class WebsitePage(models.Model):
     """
     Website pages to serve.
+    Define any settings and filters here
     """
     page = models.CharField(max_length=50)
     website = models.ForeignKey('Website')
+    categories = models.ManyToManyField('Category')
+    get_data = models.CharField(max_length=2,
+                                choices=Website.YN)
 
 class Analytics(models.Model):
     """
@@ -62,6 +64,7 @@ class WebManager(models.Manager):
         except Website.DoesNotExist:
             # return an empty context
             return {'context': {}}
+        
         return {}
         
 

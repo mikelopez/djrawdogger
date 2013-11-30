@@ -5,8 +5,34 @@ class Website(models.Model):
     """
     We need a website to serve.
     """
+    YN = ('y','y',),('n','n'),)
     domain = models.CharField(max_length=50)
     objects = WebManager()
+    use_category = models.CharField(max_length=2,
+                                    choices=YN)
+    category = models.ForeignKey('Category', blank=True, null=True)
+    
+
+class CategoryManager(models.Manager):
+    @classmethod
+    def sync_with_tags(self):
+        """Try to sync with models in xxxgalleries app."""
+        try:
+            from xxxgalleries.models import Tags as _tags
+            for i in _tags.objects.all():
+                try:
+                    return Category.objects.get(name=i)
+                except Category.DoesNotExist:
+                    c = Category(name=i)
+                    c.save()
+        except ImportError:
+            return None
+
+class Category(models.Model):
+    """
+    Category to bind a website to
+    """
+    name = models.CharField(max_length=50)
 
 class WebsitePage(models.Model):
     """

@@ -6,6 +6,7 @@ class Website(models.Model):
     We need a website to serve.
     """
     domain = models.CharField(max_length=50)
+    objects = WebManager()
 
 class WebsitePage(models.Model):
     """
@@ -25,4 +26,8 @@ class Analytics(models.Model):
     hitdate = models.DateTimeField(default=datetime.now(),
                                    auto_now_add=True)
     ua = models.TextField(blank=True, null=True)
+
+class WebManager(models.Manager):
+    @classmethod
+    def handle_request(self, request):
 

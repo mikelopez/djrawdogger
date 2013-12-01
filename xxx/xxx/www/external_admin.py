@@ -1,4 +1,5 @@
 from django.contrib.contenttypes.models import ContentType
+from django.contrib import admin
 
 class GalleryAdmin(admin.ModelAdmin):
     list_display = ['name', 'provider', 'content', 'gallery_type',
@@ -39,7 +40,7 @@ except ContentType.DoesNotExist:
 
 try:
     _providers = ContentType.objects.get(name='Providers')
-    providers = _providers.model_class()
+    Providers = _providers.model_class()
     admin.site.register(Providers, ProvidersAdmin)
 except ContentType.DoesNotExist:
     pass

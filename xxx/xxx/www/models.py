@@ -9,8 +9,32 @@ URLS = [getattr(settings, "BROWSE_URL", None),
         getattr(settings, "VIDS_URL", None)]
 TEMPLATE_PATH = getattr(settings, "TEMPLATE_PATH", "")
 
-class WebManager(models.Manager):
+
+def get_meta_domain(request):
+    """
+    Return website object by http data - no mistakes 
+    use this to get the domain name to search for a specific sitepage
+    and website
+    """
+    try:
+        sitename = request.get('HTTP_HOST')
+    except AttributeError:
+        sitename = None
+    # if request.get returned None
+    if not sitename:
+        sitename = request.META.get('HTTP_HOST')
+    domain_string = sitename.split(':')[0]
+    if not domain_string:
+        return None
+    return domain_string.replace('http://', '').replace('www.','')
+
+class ContentData(object):
+    """
+    Gets the content via a property
+    """
     filters = {}
+    def get_gallery_model(self):
+        return Website.objects.gallery_model()
 
     @property
     def browse(self):
@@ -33,7 +57,7 @@ class WebManager(models.Manager):
             if cat:
                 tag_object = cat.get_tag_object()
                 qfilter = {'tags_in': [tag_object]}
-            Gallery = self.gallery_model()
+            Gallery = self.get_gallery_model()
             return Gallery.objects.filter(**qfilter)
         return None
 
@@ -45,7 +69,7 @@ class WebManager(models.Manager):
         If none is passed, it returns all picture galleries.
         """
         value = self.filters.get('value')
-        Gallery = self.gallery_model()
+        Gallery = self.get_gallery_model()
 
         if value:
             try:
@@ -60,7 +84,7 @@ class WebManager(models.Manager):
     @property
     def vids(self):
         value = self.filters.get('value')
-        Gallery = self.gallery_model()
+        Gallery = self.get_gallery_model()
         if value:
             try:
                 return Gallery.objects.get(pk=int(value), content='video')
@@ -71,59 +95,46 @@ class WebManager(models.Manager):
                     return None
         return Gallery.objects.filter(content='video')
 
+
+
+class WebManager(models.Manager):
+    """Web Manager HTTP request handler"""
+    filters = {}
+
     @classmethod
-    def handle_request(self, request, path=None, value=None):
+    def get_data(path, value):
+        content_class = ContentData()
+        self.filters['value'] = value
+        data = getattr(content_class, path, {})
+        return data
+
+    @classmethod
+    def handle_request(request, path, value):
         """Handles the main request."""
-        domain = self.get_meta_domain(request)
-        website, page = get_website_and_page(domain, path)
+        domain = get_meta_domain(request)
+        website, page = Website.objects.get_website_and_page(domain, path)
 
         context = {'context': {'data': None}}
         fetch = getattr(page, 'get_data', False)
         if get_content:
             if path in URLS:
-                if value:
-                    self.filters['value'] = value
                 try:
-                    context.get('context')['data'] = getattr(self, path, None)
+                    context.get('context')['data'] = Website.objects.get_data(path, value)
                 except AttributeError:
                     pass
                 # always force any page to its categories that are set
             else:
-                Gallery = self.gallery_model()
+                Gallery = Website.objects.gallery_model()
                 context.get('context')['data'] = Gallery.objects.all()
             categories = page.categories.all()
             if categories:
                 qf = {'tags__in': categories}
                 context.get('context')['data'].filter(**qf)
-        context['template'] = self.get_template(page)
+        context['template'] = get_template(page)
         return context
 
-    def get_template(self, page):
-        """
-        If template does is none, raise PageProcessor exception
-        """
-        template_filename = page.template
-        searchpath = '%s/domains/%s/%s' % (TEMPLATE_PATH,
-                                           page.website.domain,
-                                           template_filename)
-        # if custom domain doesnt exist
-        if os.path.exists(searchpath):
-            #self.logger.write('Custom path domains exists, using that template!')
-            return searchpath
-        else:
-            #self.logger.write('NOT FOUND default template %s' % (searchpath))
-            raise PageProcessorException('No Template Found %s' % (searchpath))
-
-
-    def gallery_model(self):
-        """Return the Gallery() model class from ext app"""
-        try:
-            g = ContentType.objects.get(name='gallery')
-        except ContentType.DoesNotExist:
-            return None
-        return g.model_class()
-
-    def get_website_and_page(self, domain, path):
+    @classmethod
+    def get_website_and_page(domain, path):
         """Gets the website and page from request data"""
         try:
             website = Website.objects.get(domain=domain)
@@ -134,29 +145,32 @@ class WebManager(models.Manager):
         except WebsitePage.DoesNotExist:
             return {}
 
-
-    def get_meta_domain(self, request):
-        """
-        Return website object by http data - no mistakes 
-        use this to get the domain name to search for a specific sitepage
-        and website
-        """
+    @classmethod
+    def gallery_model(self):
+        """Return the Gallery() model class from ext app"""
         try:
-            sitename = request.get('HTTP_HOST')
-        except AttributeError:
-            sitename = None
-        # if request.get returned None
-        if not sitename:
-            sitename = request.META.get('HTTP_HOST')
-        domain_string = sitename.split(':')[0]
-        if not domain_string:
+            g = ContentType.objects.get(name='gallery')
+        except ContentType.DoesNotExist:
             return None
-        if logger:
-            try:
-                logger.info("utils.get_meta_domain: domain %s" % (domain_string))
-            except:
-                pass
-        return domain_string.replace('http://', '').replace('www.','')
+        return g.model_class()
+
+
+def get_template(page):
+    """
+    If template does is none, raise PageProcessor exception
+    """
+    template_filename = page.template
+    searchpath = '%s/domains/%s/%s' % (TEMPLATE_PATH,
+                                       page.website.domain,
+                                       template_filename)
+    # if custom domain doesnt exist
+    if os.path.exists(searchpath):
+        #self.logger.write('Custom path domains exists, using that template!')
+        return searchpath
+    else:
+        #self.logger.write('NOT FOUND default template %s' % (searchpath))
+        raise PageProcessorException('No Template Found %s' % (searchpath))
+
 
 
 class Website(models.Model):

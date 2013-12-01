@@ -1,10 +1,10 @@
 from django.contrib import admin
-from models import Website, Category, WebsitePage
+from models import Website, Category, WebsitePage, Analytics
 
 class WebsiteAdmin(admin.ModelAdmin):
     list_display = ['domain']
 
-class WebsitePage(admin.ModelAdmin):
+class WebsitePageAdmin(admin.ModelAdmin):
     list_display = ['website', 'page', 'get_categories',
                     'get_data', 'show_categories']
     list_filter = ('website',)

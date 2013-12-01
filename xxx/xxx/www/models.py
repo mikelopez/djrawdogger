@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 URLS = [getattr(settings, "BROWSE_URL", None),
         getattr(settings, "PIC_URL", None),
         getattr(settings, "VIDS_URL", None)]
-
+TEMPLATE_PATH = getattr(settings, "TEMPLATE_PATH", "")
 
 class WebManager(models.Manager):
     filters = {}
@@ -57,7 +57,7 @@ class WebManager(models.Manager):
                     return None
         return Gallery.objects.filter(content='pic')
 
-    @property 
+    @property
     def vids(self):
         value = self.filters.get('value')
         Gallery = self.gallery_model()
@@ -231,6 +231,12 @@ class WebsitePage(models.Model):
     categories = models.ManyToManyField('Category')
     get_data = models.NullBooleanField(default=False)
     show_categories = models.NullBooleanField(default=False)
+    @property
+    def get_categories(self):
+        c = ""
+        for x in self.categories.all():
+            c += "%s, " % (x.name)
+        return c
 
 class Analytics(models.Model):
     """

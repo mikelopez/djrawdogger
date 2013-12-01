@@ -16,7 +16,9 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
 # append directory for the apps
 sys.path.insert(0, os.path.join(PROJECT_PATH, ''))
-sys.path.insert(1, os.path.join(PROJECT_PATH, 'sciweb'))
+sys.path.insert(1, os.path.join(PROJECT_PATH, 'xxx'))
+
+TEMPLATE_PATH = '/home/user/xxx-templates/'
 
 DATABASES = {
     'default': {
@@ -34,6 +36,7 @@ DATABASES = {
 try:
     from local_settings import *
 except ImportError:
+    print "Need a local settings file"
     sys.exit(1)
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -97,7 +100,6 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '*l&oe)!4lvg4)+vbihclhagmci=29=e(8^77&*nh9v2erq@r0s'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -125,6 +127,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    TEMPLATE_PATH,
 )
 
 INSTALLED_APPS = (
@@ -134,6 +137,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'www',
+    'xxxgalleries',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

@@ -1,5 +1,5 @@
 from django.shortcuts import render_to_response, get_object_or_404, render
-from models import Website
+from models import Website, WebManager
 
 def index(request, link, filtername):
     """

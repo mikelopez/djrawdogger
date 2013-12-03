@@ -113,7 +113,6 @@ class WebManager(models.Manager):
         """Handles the main request."""
         if not path and not value:
             path = 'index'
-        print path
         domain = get_meta_domain(request)
         website, page = self.get_website_and_page(domain, path)
         if not website or not page:
@@ -122,8 +121,29 @@ class WebManager(models.Manager):
                    'website': website, 'page': page}
         fetch = getattr(page, 'get_data', False)
         if page.show_categories:
-            Tags = Website.objects.gallery_model(name_override="tags")
-            context['context']['categories'] = Tags.objects.all().order_by('name')
+            moc, mc, sc = page.model_categories, page.main_categories, page.site_categories
+            if not mc and not moc and not sc:
+                Tags = Website.objects.gallery_model(name_override="tags")
+                context['context']['categories'] = Tags.objects.all().order_by('name')
+            else:
+                Tags = Website.objects.gallery_model(name_override="tags")
+                if mc:
+                    context['context']['main_categories'] = []
+                    cntx = context['context']['main_categories'] = []
+                    thetags = Tags.objects.filter(main_tag=True).order_by('name')
+                if moc:
+                    context['context']['model_categories'] = []
+                    cntx = context['context']['model_categories'] = []
+                    thetags = Tags.objects.filter(model_tag=True).order_by('name')
+                if sc:
+                    context['context']['site_categories'] = []
+                    cntx = context['context']['site_categories'] = []
+                    thetags = Tags.objects.filter(site_tag=True).order_by('name')
+                for i in thetags:
+                    cntx.append({'name': i.name, 'id': i.id,
+                                 'cache_picgalleries_count': i.cache_picgalleries_count,
+                                 'cache_vidgalleries_count': i.cache_vidgalleries_count,
+                                 'thumbnail': i.get_pic_thumb})
 
         if fetch:
             if path in URLS:
@@ -261,6 +281,9 @@ class WebsitePage(models.Model):
     categories = models.ManyToManyField('Category', blank=True, null=True)
     get_data = models.NullBooleanField(default=False)
     show_categories = models.NullBooleanField(default=False)
+    main_categories = models.NullBooleanField(default=False)
+    site_categories = models.NullBooleanField(default=False)
+    model_categories = models.NullBooleanField(default=False)
     template_filename = models.CharField(max_length=150, blank=True, null=True)
     @property
     def get_categories(self):

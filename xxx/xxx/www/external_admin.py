@@ -7,7 +7,8 @@ class GalleryAdmin(admin.ModelAdmin):
     list_filter = ('provider', 'content', 'gallery_type',)
 
 class TagsAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'cache_picgalleries_count', 'cache_vidgalleries_count',
+                    'main_tag', 'model_tag', 'site_tag']
 
 class ProvidersAdmin(admin.ModelAdmin):
     list_display = ['name']

@@ -23,7 +23,6 @@ def index(request, **kwargs):
             template = dirs
     if not template:
         raise Exception('No template has been found')
-    print web.get('context')
     return render(request, template, web.get('context'))
 
 

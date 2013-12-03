@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from django.db import models
 from django.conf import settings
@@ -108,15 +109,23 @@ class WebManager(models.Manager):
         data = getattr(content_class, path, {})
         return data
 
-    @classmethod
-    def handle_request(request, path, value):
+    def handle_request(self, request, path, value):
         """Handles the main request."""
+        if not path and not value:
+            path = 'index'
+        print path
         domain = get_meta_domain(request)
-        website, page = Website.objects.get_website_and_page(domain, path)
-
-        context = {'context': {'data': None}}
+        website, page = self.get_website_and_page(domain, path)
+        if not website or not page:
+            return None
+        context = {'context': {'data': None},
+                   'website': website, 'page': page}
         fetch = getattr(page, 'get_data', False)
-        if get_content:
+        if page.show_categories:
+            Tags = Website.objects.gallery_model(name_override="tags")
+            context['context']['categories'] = Tags.objects.all().order_by('name')
+
+        if fetch:
             if path in URLS:
                 try:
                     context.get('context')['data'] = Website.objects.get_data(path, value)
@@ -133,23 +142,26 @@ class WebManager(models.Manager):
         context['template'] = get_template(page)
         return context
 
-    @classmethod
-    def get_website_and_page(domain, path):
+    def get_website_and_page(self, domain, path):
         """Gets the website and page from request data"""
         try:
             website = Website.objects.get(domain=domain)
         except Website.DoesNotExist:
-            return {'context': {}}
+            return None, None
         try:
             page = WebsitePage.objects.get(website=website, page=path)
         except WebsitePage.DoesNotExist:
-            return {}
+            return None, None
+        return website, page
 
     @classmethod
-    def gallery_model(self):
+    def gallery_model(self, name_override=None):
         """Return the Gallery() model class from ext app"""
         try:
-            g = ContentType.objects.get(name='gallery')
+            if not name_override:
+                g = ContentType.objects.get(name='gallery')
+            else:
+                g = ContentType.objects.get(name=name_override)
         except ContentType.DoesNotExist:
             return None
         return g.model_class()
@@ -159,7 +171,7 @@ def get_template(page):
     """
     If template does is none, raise PageProcessor exception
     """
-    template_filename = page.template
+    template_filename = page.template_filename
     searchpath = '%s/domains/%s/%s' % (TEMPLATE_PATH,
                                        page.website.domain,
                                        template_filename)
@@ -169,7 +181,7 @@ def get_template(page):
         return searchpath
     else:
         #self.logger.write('NOT FOUND default template %s' % (searchpath))
-        raise PageProcessorException('No Template Found %s' % (searchpath))
+        return None
 
 
 
@@ -180,6 +192,10 @@ class Website(models.Model):
     YN = (('y','y',),('n','n'))
     domain = models.CharField(max_length=50)
     objects = WebManager()
+    def __str__(self):
+        return str(self.domain)
+    def __unicode__(self):
+        return unicode(self.domain)
 
 class CategoryManager(models.Manager):
     """Category Manager"""
@@ -242,9 +258,10 @@ class WebsitePage(models.Model):
     """
     page = models.CharField(max_length=50)
     website = models.ForeignKey('Website')
-    categories = models.ManyToManyField('Category')
+    categories = models.ManyToManyField('Category', blank=True, null=True)
     get_data = models.NullBooleanField(default=False)
     show_categories = models.NullBooleanField(default=False)
+    template_filename = models.CharField(max_length=150, blank=True, null=True)
     @property
     def get_categories(self):
         c = ""

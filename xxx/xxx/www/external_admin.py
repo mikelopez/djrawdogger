@@ -9,6 +9,7 @@ class GalleryAdmin(admin.ModelAdmin):
 class TagsAdmin(admin.ModelAdmin):
     list_display = ['name', 'cache_picgalleries_count', 'cache_vidgalleries_count',
                     'main_tag', 'model_tag', 'site_tag']
+    list_filter = ('main_tag', 'model_tag', 'site_tag',)
 
 class ProvidersAdmin(admin.ModelAdmin):
     list_display = ['name']
@@ -16,6 +17,12 @@ class ProvidersAdmin(admin.ModelAdmin):
 class BannersAdmin(admin.ModelAdmin):
     list_display = ['name', 'ratio', 'width', 'height', 'jumplink']
     list_filter = ('ratio',)
+
+class PicTagFacesAdmin(admin.ModelAdmin):
+    list_display = ['tag', 'gallery',]
+
+class VidTagFacesAdmin(admin.ModelAdmin):
+    list_display = ['tag', 'gallery',]
 
 # create the models from content type
 try:
@@ -43,5 +50,19 @@ try:
     _providers = ContentType.objects.get(name='Providers')
     Providers = _providers.model_class()
     admin.site.register(Providers, ProvidersAdmin)
+except ContentType.DoesNotExist:
+    pass
+
+try:
+    _ptagfaces = ContentType.objects.get(name='PicTagFaces')
+    PicTagFaces = _ptagfaces.model_class()
+    admin.site.register(PicTagFaces, PicTagFacesAdmin)
+except ContentType.DoesNotExist:
+    pass
+
+try:
+    _vtagfaces = ContentType.objects.get(name='VidTagFaces')
+    VidTagFaces = _vtagfaces.model_class()
+    admin.site.register(VidTagFaces, VidTagFacesAdmin)
 except ContentType.DoesNotExist:
     pass

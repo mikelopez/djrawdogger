@@ -140,10 +140,11 @@ class WebManager(models.Manager):
                     cntx = context['context']['site_categories'] = []
                     thetags = Tags.objects.filter(site_tag=True).order_by('name')
                 for i in thetags:
+                    print "Adding tag to list"
                     cntx.append({'name': i.name, 'id': i.id,
                                  'cache_picgalleries_count': i.cache_picgalleries_count,
                                  'cache_vidgalleries_count': i.cache_vidgalleries_count,
-                                 'thumbnail': i.get_pic_thumb})
+                                 'thumbnail': i.get_pic_tag_thumb()})
 
         if fetch:
             if path in URLS:

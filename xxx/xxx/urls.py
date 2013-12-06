@@ -12,6 +12,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 if ENABLE_ADMIN:
+	from django.contrib import admin
+	admin.autodiscover()
 	urlpatterns = patterns('',
 		(r'media/(?P<path>.*)$', 'django.views.static.serve', {'document_root':'%s/media/' % (PROJECT_ROOTDIR), 'show_indexes': True}),
         (r'%s/' % STAFF_URL, include('www.urls')),

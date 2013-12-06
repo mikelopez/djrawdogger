@@ -4,6 +4,7 @@ import sys
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+ENABLE_ADMIN = False
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -32,7 +33,7 @@ DATABASES = {
     }
 }
 
-
+ALLOWED_HOSTS = []
 try:
     from local_settings import *
 except ImportError:
@@ -40,7 +41,7 @@ except ImportError:
     sys.exit(1)
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

@@ -156,7 +156,10 @@ class WebManager(models.Manager):
                 # always force any page to its categories that are set
             else:
                 Gallery = Website.objects.gallery_model()
-                context.get('context')['data'] = Gallery.objects.all()
+                context.get('context')['picture_galleries'] = \
+                                Gallery.objects.filter(content='pic')
+                context.get('context')['video_galleries'] = \
+                                Gallery.objects.filter(content='video').order_by('?')
             categories = page.categories.all()
             if categories:
                 qf = {'tags__in': categories}

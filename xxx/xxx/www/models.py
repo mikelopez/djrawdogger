@@ -80,7 +80,6 @@ class ContentData(object):
         returns['pic_galleries'] = Gallery.objects.filter(**qfilter).order_by('?')
         qfilter['content'] = 'video'
         returns['video_galleries'] = Gallery.objects.filter(**qfilter).order_by('?')
-        print "RETURNS %s" % returns
         return returns
 
     @property 

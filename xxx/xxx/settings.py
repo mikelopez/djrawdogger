@@ -180,4 +180,5 @@ LOGGING = {
 BROWSE_URL = 'browse'
 PIC_URL = 'pics'
 VIDS_URL = 'vids'
+SHOW_URL = 'showgallery'
 

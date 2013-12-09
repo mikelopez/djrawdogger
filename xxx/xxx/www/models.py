@@ -7,7 +7,8 @@ from django.contrib.contenttypes.models import ContentType
 # static urls checked first for static filters on query
 URLS = [getattr(settings, "BROWSE_URL", None),
         getattr(settings, "PIC_URL", None),
-        getattr(settings, "VIDS_URL", None)]
+        getattr(settings, "VIDS_URL", None),
+        getattr(settings, "SHOW_URL", None)]
 TEMPLATE_PATH = getattr(settings, "TEMPLATE_PATH", "")
 
 
@@ -37,29 +38,65 @@ class ContentData(object):
     def get_gallery_model(self):
         return Website.objects.gallery_model()
 
+    def get_tag_model(self):
+        """Get the tag model class and object from the external app."""
+        try:
+            _tags = ContentType.objects.get(name='tags')
+            return _tags.model_class()
+        except ContentType.DoesNotExist:
+            return None
+
+
     @property
     def browse(self):
         """
-        Browse page.
+        Browse page returns pics and video content
         If value is in filters, search for categories.
         If not, return all content.
+        Returns {
+            'tag': Tag object 
+            'galleries': Galleries QuerySet
+        }
         """
         value = self.filters.get('value')
+        returns = {'category': None}
+        Tags = self.get_tag_model()
+        qfilter = {}
         if value:
             # search by a category name/id
             try:
-                cat = Category.objects.get(pk=int(value))
+                cat = Tags.objects.get(pk=int(value))
             except (ValueError):
                 try:
-                    cat = Category.objects.get(name=str(value))
-                except (ValueError, Category.DoesNotExist):
+                    cat = Tags.objects.get(name=str(value))
+                except (ValueError, Tags.DoesNotExist):
                     cat = None
-            qfilter = {}
             if cat:
-                tag_object = cat.get_tag_object()
-                qfilter = {'tags_in': [tag_object]}
-            Gallery = self.get_gallery_model()
-            return Gallery.objects.filter(**qfilter)
+                qfilter = {'tags__in': [cat]}
+                returns['category'] = cat
+
+        Gallery = self.get_gallery_model()
+        qfilter['content'] = 'pic'
+        returns['pic_galleries'] = Gallery.objects.filter(**qfilter).order_by('?')
+        qfilter['content'] = 'video'
+        returns['video_galleries'] = Gallery.objects.filter(**qfilter).order_by('?')
+        print "RETURNS %s" % returns
+        return returns
+
+    @property 
+    def showgallery(self):
+        """Shows the gallery. Required value ID of the gallery"""
+        value = self.filters.get('value')
+        Gallery = self.get_gallery_model()
+
+        if value:
+            try:
+                return Gallery.objects.get(pk=int(value))
+            except Gallery.DoesNotExist:
+                try:
+                    return Gallery.objects.get(name=str(value))
+                except (ValueError, Gallery.DoesNotExist):
+                    return None
         return None
 
     @property
@@ -71,7 +108,9 @@ class ContentData(object):
         """
         value = self.filters.get('value')
         Gallery = self.get_gallery_model()
-
+        self.filters['content'] = 'pic'
+        return self.browse
+        """
         if value:
             try:
                 return Gallery.objects.get(pk=int(value), content='pic')
@@ -80,12 +119,19 @@ class ContentData(object):
                     return Gallery.objects.get(name=str(value), content='pic')
                 except (ValueError, Gallery.DoesNotExist):
                     return None
-        return Gallery.objects.filter(content='pic')
+        return Gallery.objects.filter(content='pic')"""
 
     @property
     def vids(self):
+        """Videos page
+        If id/name argument is passed, it filters by that category.
+        """
         value = self.filters.get('value')
         Gallery = self.get_gallery_model()
+        self.filters['content'] = 'video'
+        return self.browse
+
+        """
         if value:
             try:
                 return Gallery.objects.get(pk=int(value), content='video')
@@ -94,7 +140,7 @@ class ContentData(object):
                     return Gallery.objects.get(name=str(value), content='video')
                 except (ValueError, Gallery.DoesNotExist):
                     return None
-        return Gallery.objects.filter(content='video')
+        return Gallery.objects.filter(content='video')"""
 
 
 
@@ -102,12 +148,44 @@ class WebManager(models.Manager):
     """Web Manager HTTP request handler"""
     filters = {}
 
-    @classmethod
-    def get_data(path, value):
+    def get_data(self, path, value):
+        """Interface to content data class"""
         content_class = ContentData()
-        self.filters['value'] = value
+        content_class.filters['value'] = value
         data = getattr(content_class, path, {})
         return data
+
+    def get_selected_categories(self, context, moc, mc, sc):
+        """Sets the filtered categories into the context and returns.
+        moc = Model categories/tags
+        mc = Main categories/tags
+        sc = Site categories/tags
+        """
+        if not mc and not moc and not sc:
+            Tags = Website.objects.gallery_model(name_override="tags")
+            context['context']['categories'] = Tags.objects.all().order_by('name')
+        else:
+            Tags = Website.objects.gallery_model(name_override="tags")
+            if mc:
+                context['context']['main_categories'] = []
+                cntx = context['context']['main_categories'] = []
+                thetags = Tags.objects.filter(main_tag=True).order_by('name')
+            if moc:
+                context['context']['model_categories'] = []
+                cntx = context['context']['model_categories'] = []
+                thetags = Tags.objects.filter(model_tag=True).order_by('name')
+            if sc:
+                context['context']['site_categories'] = []
+                cntx = context['context']['site_categories'] = []
+                thetags = Tags.objects.filter(site_tag=True).order_by('name')
+            c = 0    
+            for i in thetags:
+                cntx.append({'name': i.name, 'id': i.id,
+                             'cache_picgalleries_count': i.cache_picgalleries_count,
+                             'cache_vidgalleries_count': i.cache_vidgalleries_count,
+                             'thumbnail': i.get_pic_tag_thumb()})
+                c += 1
+        return context
 
     def handle_request(self, request, path, value):
         """Handles the main request."""
@@ -120,33 +198,15 @@ class WebManager(models.Manager):
         context = {'context': {'data': None},
                    'website': website, 'page': page}
         fetch = getattr(page, 'get_data', False)
-        if page.show_categories:
-            moc, mc, sc = page.model_categories, page.main_categories, page.site_categories
-            if not mc and not moc and not sc:
-                Tags = Website.objects.gallery_model(name_override="tags")
-                context['context']['categories'] = Tags.objects.all().order_by('name')
-            else:
-                Tags = Website.objects.gallery_model(name_override="tags")
-                if mc:
-                    context['context']['main_categories'] = []
-                    cntx = context['context']['main_categories'] = []
-                    thetags = Tags.objects.filter(main_tag=True).order_by('name')
-                if moc:
-                    context['context']['model_categories'] = []
-                    cntx = context['context']['model_categories'] = []
-                    thetags = Tags.objects.filter(model_tag=True).order_by('name')
-                if sc:
-                    context['context']['site_categories'] = []
-                    cntx = context['context']['site_categories'] = []
-                    thetags = Tags.objects.filter(site_tag=True).order_by('name')
-                c = 0    
-                for i in thetags:
-                    cntx.append({'name': i.name, 'id': i.id,
-                                 'cache_picgalleries_count': i.cache_picgalleries_count,
-                                 'cache_vidgalleries_count': i.cache_vidgalleries_count,
-                                 'thumbnail': i.get_pic_tag_thumb()})
-                    c += 1
 
+        # set the categories to the context
+        if page.show_categories:
+            moc, mc, sc = page.model_categories, \
+                          page.main_categories, \
+                          page.site_categories
+            context =self.get_selected_categories(context, moc, mc, sc)
+
+        # set the galleries/other data to the context
         if fetch:
             if path in URLS:
                 try:
@@ -157,13 +217,21 @@ class WebManager(models.Manager):
             else:
                 Gallery = Website.objects.gallery_model()
                 context.get('context')['picture_galleries'] = \
-                                Gallery.objects.filter(content='pic')
+                            Gallery.objects.filter(content='pic').order_by('?')
                 context.get('context')['video_galleries'] = \
-                                Gallery.objects.filter(content='video').order_by('?')
+                            Gallery.objects.filter(content='video').order_by('?')
+
+            # set the category filter to data 
             categories = page.categories.all()
             if categories:
                 qf = {'tags__in': categories}
-                context.get('context')['data'].filter(**qf)
+                if context.get('context').get('data'):
+                    try:
+                        context.get('context').get('data').filter(**qf)
+                    except AttributeError:
+                        pass
+
+        # done... get the template and return now
         context['template'] = get_template(page)
         return context
 
@@ -191,7 +259,6 @@ class WebManager(models.Manager):
             return None
         return g.model_class()
 
-
 def get_template(page):
     """
     If template does is none, raise PageProcessor exception
@@ -209,7 +276,6 @@ def get_template(page):
         return None
 
 
-
 class Website(models.Model):
     """
     We need a website to serve.
@@ -221,6 +287,7 @@ class Website(models.Model):
         return str(self.domain)
     def __unicode__(self):
         return unicode(self.domain)
+
 
 class CategoryManager(models.Manager):
     """Category Manager"""

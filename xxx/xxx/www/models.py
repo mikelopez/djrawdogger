@@ -51,7 +51,7 @@ class ContentData(object):
     def browse(self):
         """
         Browse page returns pics and video content
-        If value is in filters, search for categories.
+        If value is in filters, search for tag.
         If not, return all content.
         Returns {
             'tag': Tag object 
@@ -66,7 +66,7 @@ class ContentData(object):
             # search by a category name/id
             try:
                 cat = Tags.objects.get(pk=int(value))
-            except (ValueError):
+            except (Tags.DoesNotExist, ValueError):
                 try:
                     cat = Tags.objects.get(name=str(value))
                 except (ValueError, Tags.DoesNotExist):
@@ -86,17 +86,21 @@ class ContentData(object):
     def showgallery(self):
         """Shows the gallery. Required value ID of the gallery"""
         value = self.filters.get('value')
+        print "Run show gallery() with value %s" % value
         Gallery = self.get_gallery_model()
-
+        returns = {}
         if value:
             try:
-                return Gallery.objects.get(pk=int(value))
-            except Gallery.DoesNotExist:
+                returns['gallery'] = Gallery.objects.get(pk=int(value))
+                return returns
+            except (Gallery.DoesNotExist, ValueError):
+                # additionally try to look up by name string
                 try:
-                    return Gallery.objects.get(name=str(value))
+                    returns['gallery'] = Gallery.objects.get(filter_name=str(value))
+                    return returns
                 except (ValueError, Gallery.DoesNotExist):
-                    return None
-        return None
+                    return returns
+        return returns
 
     @property
     def pics(self):
@@ -109,16 +113,7 @@ class ContentData(object):
         Gallery = self.get_gallery_model()
         self.filters['content'] = 'pic'
         return self.browse
-        """
-        if value:
-            try:
-                return Gallery.objects.get(pk=int(value), content='pic')
-            except Gallery.DoesNotExist:
-                try:
-                    return Gallery.objects.get(name=str(value), content='pic')
-                except (ValueError, Gallery.DoesNotExist):
-                    return None
-        return Gallery.objects.filter(content='pic')"""
+
 
     @property
     def vids(self):
@@ -130,17 +125,6 @@ class ContentData(object):
         self.filters['content'] = 'video'
         return self.browse
 
-        """
-        if value:
-            try:
-                return Gallery.objects.get(pk=int(value), content='video')
-            except Gallery.DoesNotExist:
-                try:
-                    return Gallery.objects.get(name=str(value), content='video')
-                except (ValueError, Gallery.DoesNotExist):
-                    return None
-        return Gallery.objects.filter(content='video')"""
-
 
 
 class WebManager(models.Manager):
@@ -151,6 +135,7 @@ class WebManager(models.Manager):
         """Interface to content data class"""
         content_class = ContentData()
         content_class.filters['value'] = value
+        print "Value is %s" % value
         data = getattr(content_class, path, {})
         return data
 
@@ -194,8 +179,8 @@ class WebManager(models.Manager):
         website, page = self.get_website_and_page(domain, path)
         if not website or not page:
             return None
-        context = {'context': {'data': None},
-                   'website': website, 'page': page}
+        context = {'context': {'data': None,
+                               'website': website, 'page': page}}
         fetch = getattr(page, 'get_data', False)
 
         # set the categories to the context
@@ -356,6 +341,7 @@ class WebsitePage(models.Model):
     site_categories = models.NullBooleanField(default=False)
     model_categories = models.NullBooleanField(default=False)
     template_filename = models.CharField(max_length=150, blank=True, null=True)
+    footer_scripts = models.TextField(blank=True, null=True)
     @property
     def get_categories(self):
         c = ""

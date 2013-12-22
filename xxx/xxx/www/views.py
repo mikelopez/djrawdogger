@@ -17,8 +17,8 @@ def index(request, **kwargs):
     template = None
     if TEMPLATE_PATH:
         dirs = "%s/domains/%s/%s" % (TEMPLATE_PATH,
-                                    web.get('website').domain,
-                                    web.get('page').template_filename)
+                                    web.get('context').get('website').domain,
+                                    web.get('context').get('page').template_filename)
         if os.path.exists(dirs):
             template = dirs
     if not template:

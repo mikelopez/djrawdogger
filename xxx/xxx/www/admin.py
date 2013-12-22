@@ -2,7 +2,7 @@ from django.contrib import admin
 from models import Website, Category, WebsitePage, Analytics
 
 class WebsiteAdmin(admin.ModelAdmin):
-    list_display = ['domain']
+    list_display = ['domain', 'active', 'whitelabel', 'watermark']
 
 class WebsitePageAdmin(admin.ModelAdmin):
     list_display = ['website', 'page', 'get_categories',

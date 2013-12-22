@@ -266,7 +266,11 @@ class Website(models.Model):
     """
     YN = (('y','y',),('n','n'))
     domain = models.CharField(max_length=50)
+    active = models.NullBooleanField(default=False, null=True, blank=True)
+    whitelabel = models.NullBooleanField(default=False, null=True, blank=True)
+    watermarked = models.NullBooleanField(default=False, null=True, blank=True)
     objects = WebManager()
+
     def __str__(self):
         return str(self.domain)
     def __unicode__(self):

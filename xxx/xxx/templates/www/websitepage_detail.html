@@ -1,17 +1,72 @@
 {% extends "www/mainweb-base.html" %}
 
-{% block title %}Website Page {{object.title}}{% endblock %}
-{% block heading %}Website Page: {{object.title}}{% endblock %}
+{% block title %}Website Page {{object.page}}{% endblock %}
+{% block heading %}Website Page: {{object.page}}{% endblock %}
 {% block websitepage-tab %}active{% endblock %}
 
 {% block detail_view %}
 	
-    <b>Website Page:</b> {{object.title}}<br />
-
+    
+    <table class="table-bordered table-striped table">
+            <tr>
+                <td>Get Data</td>
+                <td>Show Tags</td>
+                <td>Main Tags only</td>
+                <td>Site Tags only</td>
+                <td>Model Tags only</td>
+            </tr>
+            <tr>
+                <td>
+                  {% if object.get_data %}
+                    <i class="fa fa-check fa-1x" style="color:green;"></i>
+                    <!--span class="label label-success">Active</span-->
+                  {% else %}
+                  <i class="fa fa-check fa-1x" style="color:red;"></i>
+                    <!--span class="label label-danger">Inactive</span-->
+                  {% endif %}
+              </td>
+              <td>
+                 {% if object.show_categories %}
+                    <i class="fa fa-check fa-1x" style="color:green;"></i>
+                    <!--span class="label label-success">Active</span-->
+                  {% else %}
+                  <i class="fa fa-check fa-1x" style="color:red;"></i>
+                    <!--span class="label label-danger">Inactive</span-->
+                  {% endif %}
+              </td>
+              <td>
+                {% if object.main_categories %}
+                    <i class="fa fa-check fa-1x" style="color:green;"></i>
+                    <!--span class="label label-success">Active</span-->
+                  {% else %}
+                  <i class="fa fa-check fa-1x" style="color:red;"></i>
+                    <!--span class="label label-danger">Inactive</span-->
+                  {% endif %}
+              </td>
+              <td>
+                  {% if object.site_categories %}
+                    <i class="fa fa-check fa-1x" style="color:green;"></i>
+                    <!--span class="label label-success">Active</span-->
+                  {% else %}
+                  <i class="fa fa-check fa-1x" style="color:red;"></i>
+                    <!--span class="label label-danger">Inactive</span-->
+                  {% endif %}
+              </td>
+              <td>
+                  {% if object.model_categories %}
+                    <i class="fa fa-check fa-1x" style="color:green;"></i>
+                    <!--span class="label label-success">Active</span-->
+                  {% else %}
+                  <i class="fa fa-check fa-1x" style="color:red;"></i>
+                    <!--span class="label label-danger">Inactive</span-->
+                  {% endif %}
+              </td>
+            </tr>
+        </table>
     <hr />
-    <b>Template:</b> {{object.template}}<br /><br />
+    <b>URL:</b> http://{{object.website.domain}}/{{object.page}}<br />
     <b>Website:</b> {{object.website.domain}}<br />
-    <b>URL:</b> http://{{object.website.domain}}/{{object.name}}<br /><br />
+    <b>Template:</b> {{object.template_filename}}<br /><br />
     <input type="button" class="btn btn-danger pull-left" value="Edit" 
                 onclick="window.location='{% url 'websitepage_update' pk=object.pk %}';"/>
     <br />

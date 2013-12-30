@@ -1,5 +1,6 @@
 import os
 from django.shortcuts import render_to_response, get_object_or_404, render, Http404
+from django.http import HttpResponseRedirect, HttpResponse
 from models import Website, WebManager
 from django.conf import settings
 from classviews import *
@@ -13,6 +14,8 @@ def index(request, **kwargs):
     """
     path, filtername = kwargs.get('path'), kwargs.get('filtername')
     web = Website.objects.handle_request(request, path, filtername)
+    if web.get('redirect'):
+        return HttpResponseRedirect(web.get('redirect'))
     if not web:
         raise Http404
     template = None

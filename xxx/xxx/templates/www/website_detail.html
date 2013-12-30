@@ -1,4 +1,4 @@
-{% extends "mainweb/mainweb-base.html" %}
+{% extends "www/mainweb-base.html" %}
 
 {% block title %}Website {{object.domain}}{% endblock %}
 {% block heading %}
@@ -14,9 +14,54 @@ Website: {{object.domain}}{% endblock %}
 
 	
 	<div style="width:300px;float:left;font-size:13px;">
-    	<b>Website:</b> {{object.domain}}<br /> - {{object.notes}}<hr />
-    	<b>Meta Keywords:</b> {{object.meta_key}}<br />
-    	<b>Meta Description:</b> {{object.meta_desc}}<hr />
+    	<b>Website:</b> {{object.domain}}<br /> 
+    	<table class="table-bordered table-striped table">
+    		<tr>
+    			<td>Active</td>
+    			<td>Whitelabel</td>
+    			<td>Watermarked</td>
+    			<td>Redirect</td>
+    		</tr>
+    		<tr>
+    			<td>
+    			  {% if object.active %}
+			        <i class="fa fa-power-off fa-1x" style="color:green;"></i>
+			        <!--span class="label label-success">Active</span-->
+			      {% else %}
+			      <i class="fa fa-power-off fa-1x" style="color:red;"></i>
+			        <!--span class="label label-danger">Inactive</span-->
+			      {% endif %} 
+			    </td>
+    			<td>
+    				 {% if object.whitelabel %}
+			            <i class="fa fa-check fa-1x" style="color:green;"></i>
+			            <!--span class="label label-success">Active</span-->
+			          {% else %}
+			          <i class="fa fa-check fa-1x" style="color:red;"></i>
+			            <!--span class="label label-danger">Inactive</span-->
+			          {% endif %}
+    			</td>
+    			<td>
+    			{% if object.watermarked %}
+			            <i class="fa fa-check fa-1x" style="color:green;"></i>
+			            <!--span class="label label-success">Active</span-->
+			          {% else %}
+			          <i class="fa fa-check fa-1x" style="color:red;"></i>
+			            <!--span class="label label-danger">Inactive</span-->
+			          {% endif %}
+    			</td>
+    			<td>
+    			{% if object.redirect_to %}
+			            <i class="fa fa-check fa-1x" style="color:green;"></i>
+			            <!--span class="label label-success">Active</span-->
+			          {% else %}
+			          <i class="fa fa-check fa-1x" style="color:red;"></i>
+			            <!--span class="label label-danger">Inactive</span-->
+			          {% endif %}
+    			</td>
+    		</tr>
+    	</table>
+
     </div>
     {% if object.has_pages %}
 	<div style="width:500px;float:right;margin-left:15px;">
@@ -32,7 +77,22 @@ Website: {{object.domain}}{% endblock %}
 			{% endfor %}
 		</table>
 	</div>
+	{% else %}
+		<div class="alert alert-danger" style="float:right;width:300px;">
+			<h4>WARNING</h4>This website has 0 sitepages. It is recommended to add atleast one index page. If it needs to redirect, add the URL into the redirect_to spot for the new website-page.
+		</div>
 	{% endif %}
+
+	<div class="linebreak10"></div>
+	{% if object.redirect_to %}
+    	<hr />
+    	<b>Redirects to:</b> 
+    	<br />{{object.redirect_to}}<br />
+    	<a href="{{object.redirect_to}}" target="_blank">View Link</a>
+    	{% endif %}
+    	<hr />
+    	<b>Meta Keywords:</b> {{object.meta_key}}<br />
+    	<b>Meta Description:</b> {{object.meta_desc}}<hr />
 
 {% endblock %}
 

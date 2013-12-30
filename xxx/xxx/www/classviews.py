@@ -10,7 +10,7 @@ from models import Website, WebsitePage
 from forms import WebsiteForm, WebsitePageForm
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 LOG_ON = getattr(settings, "LOG_ON", False)
-
+MODULES = getattr(settings, "MODULES", ())
 
 class UpdateInstanceView(UpdateView):
     """Todo:
@@ -26,22 +26,45 @@ class UpdateInstanceView(UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
+
 """
 class AdminIndexView(StaffuserRequiredMixin, TemplateView):
     # the admin index base view
     template_name = "www/admin-index.html"
 
 """
+class BaseListView(ListView):
+    def get_context_data(self, **kwargs):
+        context = super(BaseListView, self).get_context_data(**kwargs)
+        context['extmodules'] = MODULES
+        return context
+
+class BaseCreateView(CreateView):
+    def get_context_data(self, **kwargs):
+        context = super(BaseCreateView, self).get_context_data(**kwargs)
+        context['extmodules'] = MODULES
+        return context
+
+class BaseDetailView(DetailView):
+    """
+    Base Detail Page View.
+    """
+    #queryset = Website.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(BaseDetailView, self).get_context_data(**kwargs)
+        context['extmodules'] = MODULES
+        return context
 
 
 # Websites
-class WebsiteView(StaffuserRequiredMixin, ListView):
+class WebsiteView(StaffuserRequiredMixin, BaseListView):
     """
     Shows the list of websites.
     """
     model = Website
 
-class CreateWebsite(StaffuserRequiredMixin, CreateView):
+class CreateWebsite(StaffuserRequiredMixin, BaseCreateView):
     """
     Create a new Website.
     """
@@ -58,7 +81,7 @@ class UpdateWebsite(StaffuserRequiredMixin, UpdateInstanceView):
         obj = Website.objects.get(id=self.kwargs['pk'])
         return obj
     
-class WebsiteDetailView(StaffuserRequiredMixin, DetailView):
+class WebsiteDetailView(StaffuserRequiredMixin, BaseDetailView):
     """
     Website Detail Page View.
     """
@@ -69,13 +92,13 @@ class WebsiteDetailView(StaffuserRequiredMixin, DetailView):
 
 
 # Website Pages
-class WebsitePageView(StaffuserRequiredMixin, ListView):
+class WebsitePageView(StaffuserRequiredMixin, BaseListView):
     """
     Shows a list of the website-pages.
     """
     model = WebsitePage
 
-class CreateWebsitePage(StaffuserRequiredMixin, CreateView):
+class CreateWebsitePage(StaffuserRequiredMixin, BaseCreateView):
     """
     Create a website-page.
     """
@@ -92,7 +115,7 @@ class UpdateWebsitePage(StaffuserRequiredMixin, UpdateInstanceView):
         obj = WebsitePage.objects.get(id=self.kwargs['pk'])
         return obj
     
-class WebsitePageDetailView(StaffuserRequiredMixin, DetailView):
+class WebsitePageDetailView(StaffuserRequiredMixin, BaseDetailView):
     """
     Website-page detail view.
     """

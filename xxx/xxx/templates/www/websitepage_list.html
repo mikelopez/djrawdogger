@@ -6,21 +6,63 @@
 
 {% block table_list %}
 
-  <table class="table table-bordered" style="width:100%;">
+  <table class="table table-bordered" style="width:100%;font-size:13px;">
     <tr>
       <td></td>
-      <td>Name</td><td>Website</td><td>Title</td>
-      <td>Type</td><td>Template</td><td>Redirect?</td>
+      <td>Name</td><td>Website</td><td>Get Data</td>
+      <td>Show Tags</td><td>Main Tags</td><td>Site Tags</td>
+      <td>Model Tags</td>
     </tr>
     {% for i in object_list %}
     <tr>
       <td><a href="{% url 'websitepage_update' pk=i.id %}"><i class="fa fa-pencil"></i></a></td>
-      <td><a href="{% url 'websitepage_detail' pk=i.id %}">{{ i.name }}</a> </td>
-      <td><a href="/mainweb/website/{{i.website.id}}">{{ i.website.domain }}</a> </td>
-      <td>{{ i.title }}</td>
-      <td>{{ i.type }}</td>
-      <td>{{ i.template }}</td>
-      <td>{{ i.redirects_to }}</td>
+      <td><a href="{% url 'websitepage_detail' pk=i.id %}">{{ i.page }}</a> </td>
+      <td><a href="{% url 'website_detail' pk={{i.website.id}}">{{ i.website.domain }}</a> </td>
+      <td>
+          {% if i.get_data %}
+            <i class="fa fa-check fa-1x" style="color:green;"></i>
+            <!--span class="label label-success">Active</span-->
+          {% else %}
+          <i class="fa fa-check fa-1x" style="color:red;"></i>
+            <!--span class="label label-danger">Inactive</span-->
+          {% endif %}
+      </td>
+      <td>
+         {% if i.show_categories %}
+            <i class="fa fa-check fa-1x" style="color:green;"></i>
+            <!--span class="label label-success">Active</span-->
+          {% else %}
+          <i class="fa fa-check fa-1x" style="color:red;"></i>
+            <!--span class="label label-danger">Inactive</span-->
+          {% endif %}
+      </td>
+      <td>
+        {% if i.main_categories %}
+            <i class="fa fa-check fa-1x" style="color:green;"></i>
+            <!--span class="label label-success">Active</span-->
+          {% else %}
+          <i class="fa fa-check fa-1x" style="color:red;"></i>
+            <!--span class="label label-danger">Inactive</span-->
+          {% endif %}
+      </td>
+      <td>
+          {% if i.site_categories %}
+            <i class="fa fa-check fa-1x" style="color:green;"></i>
+            <!--span class="label label-success">Active</span-->
+          {% else %}
+          <i class="fa fa-check fa-1x" style="color:red;"></i>
+            <!--span class="label label-danger">Inactive</span-->
+          {% endif %}
+      </td>
+      <td>
+          {% if i.model_categories %}
+            <i class="fa fa-check fa-1x" style="color:green;"></i>
+            <!--span class="label label-success">Active</span-->
+          {% else %}
+          <i class="fa fa-check fa-1x" style="color:red;"></i>
+            <!--span class="label label-danger">Inactive</span-->
+          {% endif %}
+      </td>
     </tr>
     {% endfor %}
    </table>

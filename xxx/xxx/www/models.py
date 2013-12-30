@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -177,6 +178,9 @@ class WebManager(models.Manager):
             path = 'index'
         domain = get_meta_domain(request)
         website, page = self.get_website_and_page(domain, path)
+        if website:
+            if website.redirect_to:
+                return {'redirect': website.redirect_to}
         if not website or not page:
             return None
         context = {'context': {'data': None,
@@ -228,7 +232,7 @@ class WebManager(models.Manager):
         try:
             page = WebsitePage.objects.get(website=website, page=path)
         except WebsitePage.DoesNotExist:
-            return None, None
+            return website, None
         return website, page
 
     @classmethod
@@ -276,6 +280,10 @@ class Website(models.Model):
         return str(self.domain)
     def __unicode__(self):
         return unicode(self.domain)
+
+    def get_absolute_url(self):
+        return reverse('website_detail', kwargs={'pk': self.pk})
+
 
 
 class CategoryManager(models.Manager):
@@ -353,5 +361,8 @@ class WebsitePage(models.Model):
         for x in self.categories.all():
             c += "%s, " % (x.name)
         return c
+
+    def get_absolute_url(self):
+        return reverse('websitepage_detail', kwargs={'pk': self.pk})
 
 

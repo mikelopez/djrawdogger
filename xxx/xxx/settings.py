@@ -47,6 +47,9 @@ STAFF_URL = 'prettyadmin'
 # django default admin
 ADMIN_URL = 'admin'
 
+MODULES = (('http://site/', 'Adult Content'),
+           ('http://site/', 'Mainweb'),
+           ('http://site/', 'Adult Mainweb'),)
 try:
     from local_settings import *
 except ImportError:
@@ -188,7 +191,6 @@ LOGGING = {
         },
     }
 }
-
 
 
 

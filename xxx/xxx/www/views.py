@@ -2,6 +2,7 @@ import os
 from django.shortcuts import render_to_response, get_object_or_404, render, Http404
 from models import Website, WebManager
 from django.conf import settings
+from classviews import *
 
 TEMPLATE_PATH = getattr(settings, "TEMPLATE_PATH", None)
 def index(request, **kwargs):

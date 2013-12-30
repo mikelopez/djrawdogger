@@ -34,6 +34,19 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = []
+
+# browse by tag/category/etc
+BROWSE_URL = 'browse'
+PIC_URL = 'pics'
+VIDS_URL = 'vids'
+SHOW_URL = 'showgallery'
+
+# pretty admin
+STAFF_URL = 'prettyadmin'
+
+# django default admin
+ADMIN_URL = 'admin'
+
 try:
     from local_settings import *
 except ImportError:
@@ -129,6 +142,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    '%s/templates' % PROJECT_ROOTDIR,
     TEMPLATE_PATH,
 )
 
@@ -176,9 +190,5 @@ LOGGING = {
 }
 
 
-# browse by tag/category/etc
-BROWSE_URL = 'browse'
-PIC_URL = 'pics'
-VIDS_URL = 'vids'
-SHOW_URL = 'showgallery'
+
 

@@ -354,15 +354,4 @@ class WebsitePage(models.Model):
             c += "%s, " % (x.name)
         return c
 
-class Analytics(models.Model):
-    """
-    Keep track of teh site analytics.
-    """
-    website = models.ForeignKey('Website')
-    page = models.CharField(max_length=50)
-    count = models.IntegerField(default=0)
-    ip = models.CharField(max_length=19)
-    hitdate = models.DateTimeField(default=datetime.now(),
-                                   auto_now_add=True)
-    ua = models.TextField(blank=True, null=True)
 

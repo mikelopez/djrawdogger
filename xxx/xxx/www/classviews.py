@@ -1,0 +1,106 @@
+"""
+Set the static class views for admin functionality.
+"""
+import logging
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
+from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponse
+from django.conf import settings
+from models import Website, WebsitePage
+from forms import WebsiteForm, WebsitePageForm
+from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
+LOG_ON = getattr(settings, "LOG_ON", False)
+
+
+class UpdateInstanceView(UpdateView):
+    """Todo:
+    update providers and banners classes
+    to update views to use base UpdateInstanceView
+    """
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        clean = form.cleaned_data
+        for k, v in clean.items():
+            setattr(self.object, k, v)
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+"""
+class AdminIndexView(StaffuserRequiredMixin, TemplateView):
+    # the admin index base view
+    template_name = "www/admin-index.html"
+
+"""
+
+
+# Websites
+class WebsiteView(StaffuserRequiredMixin, ListView):
+    """
+    Shows the list of websites.
+    """
+    model = Website
+
+class CreateWebsite(StaffuserRequiredMixin, CreateView):
+    """
+    Create a new Website.
+    """
+    model = Website
+
+class UpdateWebsite(StaffuserRequiredMixin, UpdateInstanceView):
+    """
+    Updates a website.
+    """
+    model = Website
+    form_class = WebsiteForm
+    template_name = 'www/website_update.html'
+    def get_object(self, queryset=None):
+        obj = Website.objects.get(id=self.kwargs['pk'])
+        return obj
+    
+class WebsiteDetailView(StaffuserRequiredMixin, DetailView):
+    """
+    Website Detail Page View.
+    """
+    queryset = Website.objects.all()
+    def get_object(self, **kwargs):
+        obj = super(WebsiteDetailView, self).get_object(**kwargs)
+        return obj
+
+
+# Website Pages
+class WebsitePageView(StaffuserRequiredMixin, ListView):
+    """
+    Shows a list of the website-pages.
+    """
+    model = WebsitePage
+
+class CreateWebsitePage(StaffuserRequiredMixin, CreateView):
+    """
+    Create a website-page.
+    """
+    model = WebsitePage
+
+class UpdateWebsitePage(StaffuserRequiredMixin, UpdateInstanceView):
+    """
+    Updates a website page.
+    """
+    model = WebsitePage
+    form_class = WebsitePageForm
+    template_name = "www/websitepage_update.html"
+    def get_object(self, queryset=None):
+        obj = WebsitePage.objects.get(id=self.kwargs['pk'])
+        return obj
+    
+class WebsitePageDetailView(StaffuserRequiredMixin, DetailView):
+    """
+    Website-page detail view.
+    """
+    queryset = WebsitePage.objects.all()
+    def get_object(self, **kwargs):
+        obj = super(WebsitePageDetailView, self).get_object(**kwargs)
+        return obj
+
+
+
+

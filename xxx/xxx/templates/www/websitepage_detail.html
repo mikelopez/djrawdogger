@@ -1,0 +1,27 @@
+{% extends "www/mainweb-base.html" %}
+
+{% block title %}Website Page {{object.title}}{% endblock %}
+{% block heading %}Website Page: {{object.title}}{% endblock %}
+{% block websitepage-tab %}active{% endblock %}
+
+{% block detail_view %}
+	
+    <b>Website Page:</b> {{object.title}}<br />
+
+    <hr />
+    <b>Template:</b> {{object.template}}<br /><br />
+    <b>Website:</b> {{object.website.domain}}<br />
+    <b>URL:</b> http://{{object.website.domain}}/{{object.name}}<br /><br />
+    <input type="button" class="btn btn-danger pull-left" value="Edit" 
+                onclick="window.location='{% url 'websitepage_update' pk=object.pk %}';"/>
+    <br />
+
+
+{% endblock %}
+
+{% block action_button %}
+    <input type="button" class="btn btn-info pull-right" value="Back to Website Pages" 
+                onclick="window.location='{% url 'websitepage_view' %}';"/><br /><br />
+    
+{% endblock %}
+

@@ -1,0 +1,34 @@
+{% extends "www/mainweb-base.html" %}
+
+{% block title %}Website Pages{% endblock %}
+{% block heading %}Website Pages{% endblock %}
+{% block websitepage-tab %}active{% endblock %}
+
+{% block table_list %}
+
+  <table class="table table-bordered" style="width:100%;">
+    <tr>
+      <td></td>
+      <td>Name</td><td>Website</td><td>Title</td>
+      <td>Type</td><td>Template</td><td>Redirect?</td>
+    </tr>
+    {% for i in object_list %}
+    <tr>
+      <td><a href="{% url 'websitepage_update' pk=i.id %}"><i class="fa fa-pencil"></i></a></td>
+      <td><a href="{% url 'websitepage_detail' pk=i.id %}">{{ i.name }}</a> </td>
+      <td><a href="/mainweb/website/{{i.website.id}}">{{ i.website.domain }}</a> </td>
+      <td>{{ i.title }}</td>
+      <td>{{ i.type }}</td>
+      <td>{{ i.template }}</td>
+      <td>{{ i.redirects_to }}</td>
+    </tr>
+    {% endfor %}
+   </table>
+
+ {% endblock %}
+
+
+ {% block action_button %}
+    <input type="button" class="btn btn-info pull-right" value="Add Website Page" 
+                onclick="window.location='{% url 'websitepage_add' %}';"/>
+{% endblock %}

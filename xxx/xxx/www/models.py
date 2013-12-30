@@ -269,6 +269,7 @@ class Website(models.Model):
     active = models.NullBooleanField(default=False, null=True, blank=True)
     whitelabel = models.NullBooleanField(default=False, null=True, blank=True)
     watermarked = models.NullBooleanField(default=False, null=True, blank=True)
+    redirect_to = models.TextField(blank=True, null=True)
     objects = WebManager()
 
     def __str__(self):

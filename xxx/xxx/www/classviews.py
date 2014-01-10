@@ -17,6 +17,11 @@ class UpdateInstanceView(UpdateView):
     update providers and banners classes
     to update views to use base UpdateInstanceView
     """
+    def get_context_data(self, **kwargs):
+        context = super(UpdateInstanceView, self).get_context_data(**kwargs)
+        context['extmodules'] = MODULES
+        return context
+        
     def form_valid(self, form):
         self.object = form.save(commit=False)
         clean = form.cleaned_data

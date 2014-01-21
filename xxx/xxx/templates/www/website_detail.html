@@ -66,13 +66,14 @@ Website: {{object.domain}}{% endblock %}
     {% if object.has_pages %}
 	<div style="width:500px;float:right;margin-left:15px;">
 		<h4>Website Pages</h4>
-		<table class="table table-bordered table-striped" style="font-size:12px;">
+		<table class="table-bordered table-striped table">
+            <tr><td>Page</td><td>Title</td><td>Get Data</td><td>Template</td></tr>
 			{% for i in object.websitepage_set.select_related %}
-				<tr>
-					<td>{{i.name}}</td>
+				<tr style="font-size:12px;">
+					<td>{{i.page}}</td>
 					<td>{{i.title}}</td>
-					<td>{{i.type}}</td>
-					<td>{{i.template}}</td>
+					<td>{{i.get_data}}</td>
+					<td>{{i.template_filename}}</td>
 				</tr>			
 			{% endfor %}
 		</table>

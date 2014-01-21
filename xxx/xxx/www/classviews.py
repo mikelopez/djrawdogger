@@ -11,6 +11,11 @@ from forms import WebsiteForm, WebsitePageForm
 from braces.views import LoginRequiredMixin, StaffuserRequiredMixin
 LOG_ON = getattr(settings, "LOG_ON", False)
 MODULES = getattr(settings, "MODULES", ())
+TRACK_IT = getattr(settings, "TRACK_IT", "")
+try:
+    from sciweb_tracker.models import *
+except ImportError:
+    TRACK_IT = False
 
 class UpdateInstanceView(UpdateView):
     """Todo:
@@ -128,6 +133,14 @@ class WebsitePageDetailView(StaffuserRequiredMixin, BaseDetailView):
     def get_object(self, **kwargs):
         obj = super(WebsitePageDetailView, self).get_object(**kwargs)
         return obj
+    def get_context_data(self, **kwargs):
+        context = super(WebsitePageDetailView, self).get_context_data(**kwargs)
+        context['extmodules'] = MODULES
+        if TRACK_IT:
+            obj = context.get('object')
+            context['tracking'] = Tracking.objects.filter(domain=obj.website.domain,
+                                                          action='view', path=obj.page, pageid=obj.pk)
+        return context
 
 
 

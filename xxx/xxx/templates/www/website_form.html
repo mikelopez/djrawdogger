@@ -13,13 +13,15 @@
 
 {% block form_submit_to %}{% url 'website_add' %}{% endblock %}
 {% block add_website_form %}
+<div class="well" style="width:484px;">
     <table width="650">
       {{form.as_table}}
     </table>
     <input type="submit" class="btn btn-success" value="Add Website" />
- {% endblock %}
+</div>
+{% endblock %}
 
 {% block action_button %}
-    <input type="button" class="btn btn-info pull-right" value="View Websites" 
+    <input type="button" class="btn btn-danger pull-right" value="View Websites" 
                 onclick="window.location='{% url 'website_view' %}';"/>
 {% endblock %}

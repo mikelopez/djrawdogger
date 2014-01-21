@@ -1,4 +1,5 @@
 import os
+import uuid
 from datetime import datetime
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -11,6 +12,11 @@ URLS = [getattr(settings, "BROWSE_URL", None),
         getattr(settings, "VIDS_URL", None),
         getattr(settings, "SHOW_URL", None)]
 TEMPLATE_PATH = getattr(settings, "TEMPLATE_PATH", "")
+TRACK_IT = getattr(settings, "TRACK_IT", "")
+try:
+    from sciweb_tracker.models import *
+except ImportError:
+    TRACK_IT = False
 
 
 def get_meta_domain(request):
@@ -221,6 +227,18 @@ class WebManager(models.Manager):
 
         # done... get the template and return now
         context['template'] = get_template(page)
+        # at the end, track results if set 
+        if TRACK_IT:
+            if not request.session.get('SID'):
+                request.session['SID'] = uuid.uuid4()
+            t = Tracking.objects.trackit(sid=request.session.get('SID'), 
+                                            action='view', 
+                                            name='default',
+                                            domain=website.domain, 
+                                            path=page.page,
+                                            pageid=page.pk, 
+                                            ipaddress=request.META.get('REMOTE_ADDR'), 
+                                            ua=request.META.get('HTTP_USER_AGENT'))
         return context
 
     def get_website_and_page(self, domain, path):
@@ -280,6 +298,10 @@ class Website(models.Model):
         return str(self.domain)
     def __unicode__(self):
         return unicode(self.domain)
+    def has_pages(self):
+        if self.websitepage_set.select_related().count() > 0:
+            return True
+        return False
 
     def get_absolute_url(self):
         return reverse('website_detail', kwargs={'pk': self.pk})
@@ -347,6 +369,7 @@ class WebsitePage(models.Model):
     """
     page = models.CharField(max_length=50)
     website = models.ForeignKey('Website')
+    title = models.CharField(max_length=150, blank=True, null=True)
     categories = models.ManyToManyField('Category', blank=True, null=True)
     get_data = models.NullBooleanField(default=False)
     show_categories = models.NullBooleanField(default=False)

@@ -42,14 +42,19 @@ VIDS_URL = 'vids'
 SHOW_URL = 'showgallery'
 
 # pretty admin
-STAFF_URL = 'prettyadmin'
+STAFF_URL = 'staff'
 
 # django default admin
 ADMIN_URL = 'admin'
 
-MODULES = (('http://site/', 'Adult Content'),
+MODULES = (('http://site/', 'Content'),
            ('http://site/', 'Mainweb'),
-           ('http://site/', 'Adult Mainweb'),)
+           ('http://site/', 'Mainweb 2'),)
+
+# set the tracking app to run
+TRACK_IT = True
+
+
 try:
     from local_settings import *
 except ImportError:
@@ -159,6 +164,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'www',
     'xxxgalleries',
+    'sciweb_tracker',
     # Uncomment the next line to enable the admin:
     # Uncomment the next line to enable admin documentation:
 )
@@ -191,6 +197,4 @@ LOGGING = {
         },
     }
 }
-
-
 

@@ -14,8 +14,8 @@ admin.autodiscover()
 if ENABLE_ADMIN:
 	urlpatterns = patterns('',
 		(r'media/(?P<path>.*)$', 'django.views.static.serve', {'document_root':'%s/media/' % (PROJECT_ROOTDIR), 'show_indexes': True}),
+        (r'%s/' % STAFF_URL, include('www.urls')),
 	    (r'%s/' % ADMIN_URL, include(admin.site.urls)),
-	    (r'%s/' % STAFF_URL, include('www.urls')),
 	    (r'logout', logout),
 	    (r'accounts/login/$', login),
 	    (r'login/$', login),

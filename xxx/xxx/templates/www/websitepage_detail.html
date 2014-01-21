@@ -1,7 +1,11 @@
 {% extends "www/mainweb-base.html" %}
 
-{% block title %}Website Page {{object.page}}{% endblock %}
-{% block heading %}Website Page: {{object.page}}{% endblock %}
+{% block title %}
+Website Page {{object.page}}{% endblock %}
+
+{% block heading %}<i class="fa fa-sitemap fa-1x" style="color:green;"></i> &nbsp;&nbsp;
+Website Page: {{object.page}}
+{% endblock %}
 {% block websitepage-tab %}active{% endblock %}
 
 {% block detail_view %}
@@ -69,8 +73,27 @@
     <b>Template:</b> {{object.template_filename}}<br /><br />
     <input type="button" class="btn btn-danger pull-left" value="Edit" 
                 onclick="window.location='{% url 'websitepage_update' pk=object.pk %}';"/>
-    <br />
-
+    <br /><br /><hr />
+    <h3><i class="fa fa-bar-chart-o fa-1x" style="color:green;"></i>&nbsp;&nbsp;&nbsp;Tracking</h3>
+    <table class="table-bordered table-striped table">
+            <tr>
+                <td>Session</td>
+                <td>Path</td>
+                <td>Counter</td>
+                <td>IP</td>
+                <td>Referer</td>
+                <td>UserAgent</td>
+            </tr>
+    {% for i in tracking %}
+            <tr>
+                <td>{{i.sid}}</td>
+                <td>{{i.path}}</td>
+                <td>{{i.counter}}</td>
+                <td>{{i.ipaddress}}</td>
+                <td>{{i.referer}}</td>
+                <td>{{i.ua}}</td>
+            </tr>
+    {% endfor %}
 
 {% endblock %}
 

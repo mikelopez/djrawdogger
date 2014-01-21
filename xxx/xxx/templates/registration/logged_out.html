@@ -1,6 +1,6 @@
 {% extends 'www/admin-base.html' %}
 {% load staticfiles %}
-
+{% block title %}Login Sciweb-WWW{% endblock %}
 {% block additional_css_overrides %}
 <style type="text/css">
       body {
@@ -46,15 +46,19 @@
         {{form.errors}}
       </div>
       {% endif %}
-      <form class="form-signin" method="POST" action="/login/">
-        <h2 class="form-signin-heading">Please sign in</h2>{% csrf_token %}
-        <input type="text" class="input-block-level" name="username" placeholder="Email address">
-        <input type="password" class="input-block-level" name="password" placeholder="Password">
-        <label class="checkbox">
-          <input type="checkbox" value="remember-me"> Remember me
-        </label>
-        <button class="btn btn-large btn-info" type="submit">Sign in</button>
-      </form>
+      <div class="well">
+          <form class="" method="POST" action="/login/">
+            <h2 class="form-signin-heading">Please sign in</h2>{% csrf_token %}
+            Email<br />
+            <input type="text" class="input-block-level" name="username" placeholder="Email address" style="width:250px;"><br /><br />
+            Password<br />
+            <input type="password" class="input-block-level" name="password" placeholder="Password" style="width:250px;">
+            <label class="checkbox">
+              <input type="checkbox" value="remember-me"> Remember me
+            </label>
+            <button class="btn btn-large btn-info" type="submit">Sign in</button>
+          </form>
+      </div>
       {% endblock %}
 
 

@@ -3,4 +3,5 @@
 *.swp*
 *media*
 *local_deployment*
+<<<<<<< HEAD
 *.wsgi*

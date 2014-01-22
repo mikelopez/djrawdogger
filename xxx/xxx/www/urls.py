@@ -9,7 +9,7 @@ PROJECT_ROOTDIR = getattr(settings, 'PROJECT_ROOTDIR', '')
 
 urlpatterns = patterns('',
 
-    #url(r'^$', AdminIndexView.as_view(), name="adminview"),
+    url(r'^$', WebsiteView.as_view(), name="adminview"),
     
     url(r'^website/add', CreateWebsite.as_view(), name="website_add"),
     url(r'^website/update/(?P<pk>\d+)', UpdateWebsite.as_view(), name="update_website"),

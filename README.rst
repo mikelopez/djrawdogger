@@ -45,3 +45,16 @@ Replace any settings data in local_settings.py
     MODULES = (('http://some-outside-url.com', 'Tracking'),
                ('/some/internal/url/', 'Content'),
                ('/staff/website/', 'Mainweb'),)
+
+    STAFF_URL = "custom-staff"
+    ADMIN_URL = "custom-admin"
+    # dev
+    if DEBUG:
+    	ALLOWED_HOSTS = ['*']
+    else:
+    	#production
+    	ALLOWED_HOSTS = ['rawdogger.com', 'www.rawdogger.com']
+    
+    LOGIN_REDIRECT_URL = "/%s" % STAFF_URL
+
+

@@ -14,10 +14,10 @@ def index(request, **kwargs):
     """
     path, filtername = kwargs.get('path'), kwargs.get('filtername')
     web = Website.objects.handle_request(request, path, filtername)
-    if web.get('redirect'):
-        return HttpResponseRedirect(web.get('redirect'))
     if not web:
         raise Http404
+    if web.get('redirect'):
+        return HttpResponseRedirect(web.get('redirect'))
     template = None
     if TEMPLATE_PATH:
         dirs = "%s/domains/%s/%s" % (TEMPLATE_PATH,

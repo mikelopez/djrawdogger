@@ -1,0 +1,166 @@
+Downloading/unpacking django-braces
+  Getting page http://pypi.python.org/simple/django-braces
+  URLs to search for versions for django-braces:
+  * http://pypi.python.org/simple/django-braces
+  Analyzing links from page https://pypi.python.org/simple/django-braces/
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.1.0.tar.gz#md5=4bc5acb3fb5b03f2cee33f895c213908 (from https://pypi.python.org/simple/django-braces/), version: 0.1.0
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.1.1.tar.gz#md5=8b992e97756234df89dbfa2dff739889 (from https://pypi.python.org/simple/django-braces/), version: 0.1.1
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.1.2.tar.gz#md5=09ce4f8147ffbf692d286c4996c56ae1 (from https://pypi.python.org/simple/django-braces/), version: 0.1.2
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.1.3.tar.gz#md5=6331c97993895534329ab1ac00dbbcdb (from https://pypi.python.org/simple/django-braces/), version: 0.1.3
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.1.4.tar.gz#md5=edabfb943da662ef2296bb494a0a5890 (from https://pypi.python.org/simple/django-braces/), version: 0.1.4
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.1.5.tar.gz#md5=37e0958da0c91b1a446f0c463acd06ea (from https://pypi.python.org/simple/django-braces/), version: 0.1.5
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.1.6.tar.gz#md5=620f88ed8f69b5aca9b97c2031011cec (from https://pypi.python.org/simple/django-braces/), version: 0.1.6
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.1.7.tar.gz#md5=9599048ff38760ee1fc6487ce96210d4 (from https://pypi.python.org/simple/django-braces/), version: 0.1.7
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.1.8.tar.gz#md5=a18c24f5a1e7f6d4e02319a2b2f8c8c0 (from https://pypi.python.org/simple/django-braces/), version: 0.1.8
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.1.9.tar.gz#md5=a66e71a41819e11646a275eb04a2cc56 (from https://pypi.python.org/simple/django-braces/), version: 0.1.9
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.2.0.tar.gz#md5=a986b31f1194ed9e1a3d058438f53ce3 (from https://pypi.python.org/simple/django-braces/), version: 0.2.0
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.2.1.tar.gz#md5=69f1589cf4637dac3d79f1aaf78d7586 (from https://pypi.python.org/simple/django-braces/), version: 0.2.1
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.2.2.tar.gz#md5=b2ac9847709d459a652bd8dd11dcddd4 (from https://pypi.python.org/simple/django-braces/), version: 0.2.2
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-0.2.3.tar.gz#md5=42ba1e460ceda2f2710d4891d8f40fa1 (from https://pypi.python.org/simple/django-braces/), version: 0.2.3
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-1.0.0.tar.gz#md5=f6c251ecd44cb87d6289c65ab025d6c4 (from https://pypi.python.org/simple/django-braces/), version: 1.0.0
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-1.1.0.tar.gz#md5=645beb28c8e42db19ffdbe6bb27aba41 (from https://pypi.python.org/simple/django-braces/), version: 1.1.0
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-1.2.0.tar.gz#md5=16245dcacbf02c6d6fedc77ae696f0a4 (from https://pypi.python.org/simple/django-braces/), version: 1.2.0
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-1.2.1.tar.gz#md5=3ba125153e8dc4f52581fe8b7b3acc1a (from https://pypi.python.org/simple/django-braces/), version: 1.2.1
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-1.2.2.tar.gz#md5=a63f0133af68200bd0f29f227b3f14f8 (from https://pypi.python.org/simple/django-braces/), version: 1.2.2
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-1.3.0.tar.gz#md5=a1ed21b92dd365f86f9423dce2bcfb19 (from https://pypi.python.org/simple/django-braces/), version: 1.3.0
+    Found link https://pypi.python.org/packages/source/d/django-braces/django-braces-1.3.1.tar.gz#md5=e3282013612a719f1946c3a24c30ea38 (from https://pypi.python.org/simple/django-braces/), version: 1.3.1
+  Using version 1.3.1 (newest of versions: 1.3.1, 1.3.0, 1.2.2, 1.2.1, 1.2.0, 1.1.0, 1.0.0, 0.2.3, 0.2.2, 0.2.1, 0.2.0, 0.1.9, 0.1.8, 0.1.7, 0.1.6, 0.1.5, 0.1.4, 0.1.3, 0.1.2, 0.1.1, 0.1.0)
+  Downloading django-braces-1.3.1.tar.gz
+  Downloading from URL https://pypi.python.org/packages/source/d/django-braces/django-braces-1.3.1.tar.gz#md5=e3282013612a719f1946c3a24c30ea38 (from https://pypi.python.org/simple/django-braces/)
+  Running setup.py egg_info for package django-braces
+    running egg_info
+    creating pip-egg-info/django_braces.egg-info
+    writing requirements to pip-egg-info/django_braces.egg-info/requires.txt
+    writing pip-egg-info/django_braces.egg-info/PKG-INFO
+    writing top-level names to pip-egg-info/django_braces.egg-info/top_level.txt
+    writing dependency_links to pip-egg-info/django_braces.egg-info/dependency_links.txt
+    writing manifest file 'pip-egg-info/django_braces.egg-info/SOURCES.txt'
+    warning: manifest_maker: standard file '-c' not found
+    reading manifest file 'pip-egg-info/django_braces.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    writing manifest file 'pip-egg-info/django_braces.egg-info/SOURCES.txt'
+  Source in ./build/django-braces has version 1.3.1, which satisfies requirement django-braces
+Downloading/unpacking six (from django-braces)
+  Getting page http://pypi.python.org/simple/six
+  URLs to search for versions for six (from django-braces):
+  * http://pypi.python.org/simple/six
+  Analyzing links from page https://pypi.python.org/simple/six/
+    Skipping link https://pypi.python.org/packages/3.3/s/six/six-1.5.0-py2.py3-none-any.whl#md5=3307efe2bc4ca8556befc9afe297c530 (from https://pypi.python.org/simple/six/); unknown archive format: .whl
+    Skipping link https://pypi.python.org/packages/3.3/s/six/six-1.5.1-py2.py3-none-any.whl#md5=2064b715201fa76a55dea75675ee19f2 (from https://pypi.python.org/simple/six/); unknown archive format: .whl
+    Skipping link https://pypi.python.org/packages/3.3/s/six/six-1.5.2-py2.py3-none-any.whl#md5=ba32222ad0c5c7057a7c42e66e81289d (from https://pypi.python.org/simple/six/); unknown archive format: .whl
+    Found link https://pypi.python.org/packages/source/s/six/six-0.9.0.tar.gz#md5=5ce2947347101b9f54674c19ef88233d (from https://pypi.python.org/simple/six/), version: 0.9.0
+    Found link https://pypi.python.org/packages/source/s/six/six-0.9.1.tar.gz#md5=1b249e0011355722f569406135a8ac93 (from https://pypi.python.org/simple/six/), version: 0.9.1
+    Found link https://pypi.python.org/packages/source/s/six/six-0.9.2.tar.gz#md5=92ea7c870396dd9222029a188c6bbd7f (from https://pypi.python.org/simple/six/), version: 0.9.2
+    Found link https://pypi.python.org/packages/source/s/six/six-1.0.0.tar.gz#md5=37c7ff036fdff2b1bb8d55e49ccb3b44 (from https://pypi.python.org/simple/six/), version: 1.0.0
+    Found link https://pypi.python.org/packages/source/s/six/six-1.0b1.tar.gz#md5=cbfcc64af1f27162a6a6b5510e262c9d (from https://pypi.python.org/simple/six/), version: 1.0b1
+    Found link https://pypi.python.org/packages/source/s/six/six-1.1.0.tar.gz#md5=9e8099b57cd27493a6988e9c9b313e23 (from https://pypi.python.org/simple/six/), version: 1.1.0
+    Found link https://pypi.python.org/packages/source/s/six/six-1.2.0.tar.gz#md5=2a5d1afc79912832ac78fd38e3d75d7e (from https://pypi.python.org/simple/six/), version: 1.2.0
+    Found link https://pypi.python.org/packages/source/s/six/six-1.3.0.tar.gz#md5=ec47fe6070a8a64c802363d2c2b1e2ee (from https://pypi.python.org/simple/six/), version: 1.3.0
+    Found link https://pypi.python.org/packages/source/s/six/six-1.4.0.tar.gz#md5=5fcab6a067b5ebf68ede2f4d02fe7547 (from https://pypi.python.org/simple/six/), version: 1.4.0
+    Found link https://pypi.python.org/packages/source/s/six/six-1.4.1.tar.gz#md5=bdbb9e12d3336c198695aa4cf3a61d62 (from https://pypi.python.org/simple/six/), version: 1.4.1
+    Found link https://pypi.python.org/packages/source/s/six/six-1.5.0.tar.gz#md5=72b33ff89f3b2f21dd2cb28fb94f7031 (from https://pypi.python.org/simple/six/), version: 1.5.0
+    Found link https://pypi.python.org/packages/source/s/six/six-1.5.1.tar.gz#md5=bb00c982fc0ec0dd6a760500b0941fa9 (from https://pypi.python.org/simple/six/), version: 1.5.1
+    Found link https://pypi.python.org/packages/source/s/six/six-1.5.2.tar.gz#md5=322b86d0c50a7d165c05600154cecc0a (from https://pypi.python.org/simple/six/), version: 1.5.2
+    Skipping link http://bitbucket.org/gutworth/six (from https://pypi.python.org/simple/six/); not a file
+    Skipping link http://bugs.launchpad.net/python-six (from https://pypi.python.org/simple/six/); not a file
+    Skipping link http://code.launchpad.net/python-six (from https://pypi.python.org/simple/six/); not a file
+    Skipping link http://mail.python.org/mailman/listinfo/python-porting (from https://pypi.python.org/simple/six/); not a file
+    Skipping link http://packages.python.org/six/ (from https://pypi.python.org/simple/six/); not a file
+  Using version 1.5.2 (newest of versions: 1.5.2, 1.5.1, 1.5.0, 1.4.1, 1.4.0, 1.3.0, 1.2.0, 1.1.0, 1.0.0, 1.0b1, 0.9.2, 0.9.1, 0.9.0)
+  Downloading six-1.5.2.tar.gz
+  Downloading from URL https://pypi.python.org/packages/source/s/six/six-1.5.2.tar.gz#md5=322b86d0c50a7d165c05600154cecc0a (from https://pypi.python.org/simple/six/)
+  Running setup.py egg_info for package six
+    running egg_info
+    creating pip-egg-info/six.egg-info
+    writing pip-egg-info/six.egg-info/PKG-INFO
+    writing top-level names to pip-egg-info/six.egg-info/top_level.txt
+    writing dependency_links to pip-egg-info/six.egg-info/dependency_links.txt
+    writing manifest file 'pip-egg-info/six.egg-info/SOURCES.txt'
+    warning: manifest_maker: standard file '-c' not found
+    reading manifest file 'pip-egg-info/six.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    no previously-included directories found matching 'documentation/_build'
+    writing manifest file 'pip-egg-info/six.egg-info/SOURCES.txt'
+  Source in ./build/six has version 1.5.2, which satisfies requirement six (from django-braces)
+Installing collected packages: django-braces, six
+  Running setup.py install for django-braces
+    Running command /usr/bin/python -c "import setuptools; __file__='/home/sipit/rawdogger/djrawdogger/xxx/xxx/build/django-braces/setup.py'; execfile('/home/sipit/rawdogger/djrawdogger/xxx/xxx/build/django-braces/setup.py')" install --single-version-externally-managed --record /tmp/pip-WAqQy8-record/install-record.txt --install-headers /home/sipit/rawdogger/djrawdogger/xxx/xxx/lib/include
+    running install
+    running build
+    running build_py
+    creating build
+    creating build/lib.linux-i686-2.6
+    creating build/lib.linux-i686-2.6/braces
+    copying braces/forms.py -> build/lib.linux-i686-2.6/braces
+    copying braces/views.py -> build/lib.linux-i686-2.6/braces
+    copying braces/__init__.py -> build/lib.linux-i686-2.6/braces
+    running egg_info
+    writing requirements to django_braces.egg-info/requires.txt
+    writing django_braces.egg-info/PKG-INFO
+    writing top-level names to django_braces.egg-info/top_level.txt
+    writing dependency_links to django_braces.egg-info/dependency_links.txt
+    warning: manifest_maker: standard file '-c' not found
+    reading manifest file 'django_braces.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    writing manifest file 'django_braces.egg-info/SOURCES.txt'
+    running install_lib
+    creating /usr/local/lib/python2.6/dist-packages/braces
+    error: could not create '/usr/local/lib/python2.6/dist-packages/braces': Permission denied
+    Complete output from command /usr/bin/python -c "import setuptools; __file__='/home/sipit/rawdogger/djrawdogger/xxx/xxx/build/django-braces/setup.py'; execfile('/home/sipit/rawdogger/djrawdogger/xxx/xxx/build/django-braces/setup.py')" install --single-version-externally-managed --record /tmp/pip-WAqQy8-record/install-record.txt --install-headers /home/sipit/rawdogger/djrawdogger/xxx/xxx/lib/include:
+    running install
+
+running build
+
+running build_py
+
+creating build
+
+creating build/lib.linux-i686-2.6
+
+creating build/lib.linux-i686-2.6/braces
+
+copying braces/forms.py -> build/lib.linux-i686-2.6/braces
+
+copying braces/views.py -> build/lib.linux-i686-2.6/braces
+
+copying braces/__init__.py -> build/lib.linux-i686-2.6/braces
+
+running egg_info
+
+writing requirements to django_braces.egg-info/requires.txt
+
+writing django_braces.egg-info/PKG-INFO
+
+writing top-level names to django_braces.egg-info/top_level.txt
+
+writing dependency_links to django_braces.egg-info/dependency_links.txt
+
+warning: manifest_maker: standard file '-c' not found
+
+reading manifest file 'django_braces.egg-info/SOURCES.txt'
+
+reading manifest template 'MANIFEST.in'
+
+writing manifest file 'django_braces.egg-info/SOURCES.txt'
+
+running install_lib
+
+creating /usr/local/lib/python2.6/dist-packages/braces
+
+error: could not create '/usr/local/lib/python2.6/dist-packages/braces': Permission denied
+
+----------------------------------------
+Command /usr/bin/python -c "import setuptools; __file__='/home/sipit/rawdogger/djrawdogger/xxx/xxx/build/django-braces/setup.py'; execfile('/home/sipit/rawdogger/djrawdogger/xxx/xxx/build/django-braces/setup.py')" install --single-version-externally-managed --record /tmp/pip-WAqQy8-record/install-record.txt --install-headers /home/sipit/rawdogger/djrawdogger/xxx/xxx/lib/include failed with error code 1
+Exception information:
+Traceback (most recent call last):
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 252, in main
+    self.run(options, args)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 410, in run
+    requirement_set.install(install_options)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 2017, in install
+    requirement.install(install_options)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 1515, in install
+    cwd=self.source_dir, filter_stdout=self._filter_install, show_stdout=False)
+  File "/usr/lib/python2.6/dist-packages/pip.py", line 3543, in call_subprocess
+    % (command_desc, proc.returncode))
+InstallationError: Command /usr/bin/python -c "import setuptools; __file__='/home/sipit/rawdogger/djrawdogger/xxx/xxx/build/django-braces/setup.py'; execfile('/home/sipit/rawdogger/djrawdogger/xxx/xxx/build/django-braces/setup.py')" install --single-version-externally-managed --record /tmp/pip-WAqQy8-record/install-record.txt --install-headers /home/sipit/rawdogger/djrawdogger/xxx/xxx/lib/include failed with error code 1

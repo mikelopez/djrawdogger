@@ -93,7 +93,6 @@ class ContentData(object):
     def showgallery(self):
         """Shows the gallery. Required value ID of the gallery"""
         value = self.filters.get('value')
-        print "Run show gallery() with value %s" % value
         Gallery = self.get_gallery_model()
         returns = {}
         if value:
@@ -142,7 +141,6 @@ class WebManager(models.Manager):
         """Interface to content data class"""
         content_class = ContentData()
         content_class.filters['value'] = value
-        print "Value is %s" % value
         data = getattr(content_class, path, {})
         return data
 

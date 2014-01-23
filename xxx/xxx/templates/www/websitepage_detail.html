@@ -72,9 +72,25 @@ Website Page: {{object.page}}
     <b>Website:</b> {{object.website.domain}}<br />
     <b>Template:</b> {{object.template_filename}}<br /><br />
     <input type="button" class="btn btn-danger pull-left" value="Edit" 
-                onclick="window.location='{% url 'websitepage_update' pk=object.pk %}';"/>
+    onclick="window.location='{% url 'websitepage_update' pk=object.pk %}';"/><br />
     <br /><br /><hr />
-    <h3><i class="fa fa-bar-chart-o fa-1x" style="color:green;"></i>&nbsp;&nbsp;&nbsp;Tracking</h3>
+    <h3><i class="fa fa-bar-chart-o fa-1x" style="color:green;"></i>&nbsp;&nbsp;&nbsp;Tracking Counters</h3>
+        <table class="table-bordered table-striped table">
+            <tr>
+                <td>Uniques</td>
+                <td>Entrances</td>
+                <td>Pageviews</td>
+            </tr>
+            <tr>
+                <td>{{uniques}}</td>
+                <td>{{entrances}}</td>
+                <td>{{pageviews}}</td>
+            </tr>
+        </table>
+
+
+    <br /><br /><hr />
+    <h3><i class="fa fa-bar-chart-o fa-1x" style="color:green;"></i>&nbsp;&nbsp;&nbsp;Tracking Reports</h3>
     <table class="table-bordered table-striped table">
             <tr>
                 <td>Session</td>
@@ -85,7 +101,7 @@ Website Page: {{object.page}}
                 <td>UserAgent</td>
             </tr>
     {% for i in tracking %}
-            <tr>
+            <tr style="font-size:12px;">
                 <td>{{i.sid}}</td>
                 <td>{{i.path}}</td>
                 <td>{{i.counter}}</td>

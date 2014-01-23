@@ -138,8 +138,11 @@ class WebsitePageDetailView(StaffuserRequiredMixin, BaseDetailView):
         context['extmodules'] = MODULES
         if TRACK_IT:
             obj = context.get('object')
+            context['uniques'] = Tracking.objects.get_uniques(domain=obj.website.domain)
+            context['entrances'] = Tracking.objects.get_entrances(domain=obj.website.domain)
+            context['pageviews'] = Tracking.objects.get_pageviews(domain=obj.website.domain)
             context['tracking'] = Tracking.objects.filter(domain=obj.website.domain,
-                                                          action='view', path=obj.page, pageid=obj.pk)
+                    action='view', path=obj.page, pageid=obj.pk)[:10]
         return context
 
 

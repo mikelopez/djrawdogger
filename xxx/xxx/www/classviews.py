@@ -99,6 +99,18 @@ class WebsiteDetailView(StaffuserRequiredMixin, BaseDetailView):
     def get_object(self, **kwargs):
         obj = super(WebsiteDetailView, self).get_object(**kwargs)
         return obj
+    def get_context_data(self, **kwargs):
+        context = super(WebsiteDetailView, self).get_context_data(**kwargs)
+        context['extmodules'] = MODULES
+        if TRACK_IT:
+            obj = context.get('object')
+            context['uniques'] = Tracking.objects.get_uniques(domain=obj.website.domain)
+            context['entrances'] = Tracking.objects.get_entrances(domain=obj.website.domain)
+            context['pageviews'] = Tracking.objects.get_pageviews(domain=obj.website.domain)
+            context['tracking'] = Tracking.objects.filter(domain=obj.website.domain,
+                                                          action='view',).order_by('-id')[:50]
+        return context
+
 
 
 # Website Pages
@@ -142,7 +154,7 @@ class WebsitePageDetailView(StaffuserRequiredMixin, BaseDetailView):
             context['entrances'] = Tracking.objects.get_entrances(domain=obj.website.domain)
             context['pageviews'] = Tracking.objects.get_pageviews(domain=obj.website.domain)
             context['tracking'] = Tracking.objects.filter(domain=obj.website.domain,
-                    action='view', path=obj.page, pageid=obj.pk)[:10]
+                    action='view', path=obj.page, pageid=obj.pk).order_by('-id')[:50]
         return context
 
 
